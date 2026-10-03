@@ -1,30 +1,9 @@
-# Movie Recommender System 🎬
+# Content-based movie recommender
 
-A **content-based recommendation engine** that finds similar movies using TF-IDF text vectorization and cosine similarity — the same core technique behind streaming service recommendations.
-
-## 🎯 The Problem
-
-Recommendation systems power Netflix, YouTube, Amazon, and Spotify. This project implements the **content-based** approach: given a movie you like, find other movies with similar content (genres, cast, keywords, plot).
-
-## 🔧 How it works
-
-| Step | What happens |
-|------|-------------|
-| 1. Data | Movie metadata: title, genres, cast, director, keywords, overview |
-| 2. Combine | All text fields merged into one "document" per movie |
-| 3. Vectorize | **TF-IDF** converts each document into a numeric vector |
-| 4. Compare | **Cosine similarity** measures how similar every pair of movies is |
-| 5. Recommend | Sort by similarity, return the top-N most similar movies |
-
-## 🧠 Why cosine similarity?
-
-Movies are represented as vectors in a high-dimensional space. Cosine similarity measures the **angle** between vectors, ignoring magnitude — so it captures *direction of interest* (what topics a movie is about) rather than raw word counts.
-
-## 📊 Example Output
+Given a film, finds films that are similar on content — genres, cast, director, keywords, plot — using TF-IDF vectors and cosine similarity.
 
 ```
 Because you watched: The Dark Knight
-=======================================================
   0.067  The Godfather
   0.059  Inception
   0.058  Dunkirk
@@ -32,38 +11,20 @@ Because you watched: The Dark Knight
   0.048  Pulp Fiction
 ```
 
-The recommendations make intuitive sense — Dark Knight fans get other acclaimed action/drama/crime films.
+Each movie's text fields are concatenated into one document, vectorized, then compared against every other film. Cosine similarity measures the angle between vectors, which is why it works here: what separates two films is direction (what they're about), not magnitude (how much text they have).
 
-## 🚀 How to run
+The similarity scores are low in absolute terms — 0.067 is a good match for this kind of data. Plot summaries share so much vocabulary that vectors cluster tightly, and the ranking matters more than the raw value. It's a content-based recommender, so it will happily recommend other Christopher Nolan films before it finds anything genuinely different.
 
 ```bash
 pip install -r requirements.txt
 python movie_recommender.py
 ```
 
-> **Note:** To use a larger dataset, drop a `movies.csv` with columns
-> `title, genres, cast, director, keywords, overview` into this folder.
-> The script automatically uses it if present.
+Drop a `movies.csv` with `title, genres, cast, director, keywords, overview` in the folder and the script picks it up automatically.
 
-## 🏗️ Project Structure
+## Files
 
 ```
-04-movie-recommender/
-├── movie_recommender.py  # Main script
-├── requirements.txt
-└── README.md
+movie_recommender.py   # vectorize, compare, rank
+requirements.txt
 ```
-
-## 📚 ML Concepts Covered
-
-- Recommendation systems (content-based filtering)
-- TF-IDF text vectorization
-- Cosine similarity for measuring vector closeness
-- Building features from unstructured text metadata
-- The design decision of combining multiple text fields
-
-## 💡 To Extend (great hackathon ideas)
-
-- Add **collaborative filtering** (user ratings) to combine with content-based
-- Build a **Flask web UI** so users search movies in the browser
-- Add a popularity/rating hybrid weighting
